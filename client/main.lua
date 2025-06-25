@@ -82,7 +82,7 @@ CreateThread(function()
                     local steamLabel = admin.steamName or "UNKNOWN"
                     local icon = " " 
 
-                    local fullLabel = icon .. steamLabel .. " : " .. label
+                    local fullLabel = icon .. steamLabel .. " - " .. label
 
                     closeAdmins[playerId] = {
                         ped = adminPed,
@@ -117,27 +117,32 @@ end)
 
 function draw3DText(pos, text, options)
     options = options or {}
-    local color = options.color or { r = 255, g = 165, b = 0, a = 255 } 
-    local size = options.size or 0.8
+    local color = options.color or { r = 255, g = 165, b = 0, a = 255 }
+    local size = options.size or 0.5 
 
     local camCoords = GetGameplayCamCoords()
     local dist = #(camCoords - pos)
-    if dist == 0 then dist = 0.0001 end
-    local scale = (size / dist) * 2
+    if dist < 1.0 then dist = 1.0 end
+
+    local scale = (size / dist) * 1.5 
     local fov = (1 / GetGameplayCamFov()) * 100
     local finalScale = scale * fov
 
     SetDrawOrigin(pos.x, pos.y, pos.z, 0)
-    SetTextProportional(0)
-    SetTextScale(0.0 * finalScale, 0.55 * finalScale)
+    SetTextProportional(1)
+    SetTextScale(0.0 * finalScale, 0.35 * finalScale)  
     SetTextColour(color.r, color.g, color.b, color.a)
-    SetTextDropshadow(0, 0, 0, 0, 255)
-    SetTextEdge(2, 0, 0, 0, 150)
+    SetTextDropshadow(1, 0, 0, 0, 255)
+    SetTextEdge(1, 0, 0, 0, 150)
     SetTextDropShadow()
     SetTextOutline()
     SetTextEntry("STRING")
     SetTextCentre(1)
     AddTextComponentString(text)
     DrawText(0.0, 0.0)
+
+    SetTextColour(255, 255, 255, color.a / 5)
+    DrawText(0.01, 0.01)
+
     ClearDrawOrigin()
 end
